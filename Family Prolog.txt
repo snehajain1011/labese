@@ -1,0 +1,36 @@
+male(john).
+male(peter).
+male(mike).
+male(rohan).
+
+female(sara).
+female(linda).
+female(rita).
+female(anu).
+
+parent(john, peter).
+parent(john, linda).
+parent(sara, peter).
+parent(sara, linda).
+
+parent(peter, mike).
+parent(rita, mike).
+
+parent(linda, rohan).
+parent(anu, rohan).
+
+father(F, C) :- male(F), parent(F, C).
+mother(M, C) :- female(M), parent(M, C).
+
+sibling(X, Y) :- parent(P, X), parent(P, Y), X \= Y.
+
+brother(B, X) :- sibling(B, X), male(B).
+sister(S, X) :- sibling(S, X), female(S).
+
+grandfather(G, C) :- parent(P, C), father(G, P).
+grandmother(G, C) :- parent(P, C), mother(G, P).
+
+uncle(U, X) :- brother(U, P), parent(P, X).
+aunt(A, X) :- sister(A, P), parent(P, X).
+
+cousin(X, Y) :- parent(P1, X), parent(P2, Y), sibling(P1, P2).

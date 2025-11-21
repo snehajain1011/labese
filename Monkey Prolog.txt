@@ -1,0 +1,26 @@
+goal(state(_, _, _, yes)).
+
+action(state(M, no, B, No), walk(M1), state(M1, no, B, No)) :-
+    member(M1, [left, middle, right]),
+    M1 \= M.
+
+action(state(M, no, M, No), push(M1), state(M1, no, M1, No)) :-
+    member(M1, [left, middle, right]),
+    M1 \= M.
+
+action(state(M, no, M, No), climb, state(M, yes, M, No)).
+
+action(state(middle, yes, middle, no), grab,
+       state(middle, yes, middle, yes)).
+
+solve(State, _, []) :-
+    goal(State), !.
+
+solve(State, Visited, [Act | Rest]) :-
+    action(State, Act, NewState),
+    \+ member(NewState, Visited),
+    solve(NewState, [NewState | Visited], Rest).
+
+start(Steps) :-
+    Initial = state(left, no, right, no),
+    solve(Initial, [Initial], Steps).
